@@ -1,7 +1,21 @@
 <template>
   <div id="app">
-    <input type="text" v-model="name">
-    <span @click="createSymbol(name)">new</span>
+    <div>
+      <input type="text" v-model="name">
+      <span @click="createSymbol(name)">new</span>
+    </div>
+    <div>
+      <label for="innerSize">inner size</label>
+      <input type="number" name="innerSize" v-model.number="innerSize" min="0" max="1000">
+    </div>
+    <div>
+      <label for="outerSize">outer size</label>
+      <input type="number" name="outerSize" v-model.number="outerSize" min="0" max="1000">
+    </div>
+    <div>
+      <label for="lineWidth">line width</label>
+      <input type="number" name="lineWidth" v-model.number="lineWidth" min="1" max="100">
+    </div>
     <figure class="canvas" ref="canvas"></figure>
   </div>
 </template>
@@ -15,7 +29,9 @@ export default {
   data() {
     return {
       name: '',
-      lineWidth: 10
+      lineWidth: 10,
+      innerSize: 200,
+      outerSize: 500
     }
   },
   mounted() {
@@ -71,7 +87,7 @@ export default {
         const step = 360 / max
 
         bytes.slice(0, max).forEach((line, lineIndex) => {
-          if (line.draw) svg5.arc(svg5.width / 2, svg5.height / 2, svg5.width * 0.2 + (this.lineWidth * 3 * hashIndex), svg5.height * 0.2 + (this.lineWidth * 3 * hashIndex), linePosition * step, (linePosition + line.length) * step)
+          if (line.draw) svg5.arc(svg5.width / 2, svg5.height / 2, this.innerSize + (((this.outerSize - this.innerSize) / 8) * (hashIndex + 1)), this.innerSize + (((this.outerSize - this.innerSize) / 8) * (hashIndex + 1)), linePosition * step, (linePosition + line.length) * step)
           linePosition += line.length
         })
       })
